@@ -8,7 +8,7 @@ This directory contains the artifacts for the Week 11 Observability Workshop app
 - TEAM: Salud Activa - Grupo 2
 - DOCS_REPO: https://github.com/BrayanYara1/ProyectoDistribuidos2026.git
 - REFLECTION_DOC: https://docs.google.com/document/d/YOUR_GOOGLE_DOC_ID/edit
-- JOURNEY: Appointment Scheduling & Confirmation Flow
+- JOURNEY: Appointment Scheduling & Confirmation Journey
 <!-- CONFIG-END -->
 
 ## Checkpoint Index
