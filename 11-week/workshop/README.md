@@ -7,7 +7,7 @@ This directory contains the artifacts for the Week 11 Observability Workshop app
 - GITHUB_USER: BrayanYara1
 - TEAM: Salud Activa - Grupo 2
 - DOCS_REPO: https://github.com/BrayanYara1/ProyectoDistribuidos2026.git
-- REFLECTION_DOC: https://docs.google.com/document/d/1eYP_-zHU_3MgR-1C1EAnUlciFvIMyhvqfg7jPG-HaIk/edit?usp=sharing
+- REFLECTION_DOC: https://docs.google.com/document/d/1Gc2LvQxq8P0a8khEAJzAENL76F53Tfj-bUT7EObjTn8/edit?usp=sharing
 - JOURNEY: Appointment Scheduling & Confirmation Journey
 <!-- CONFIG-END -->
 
