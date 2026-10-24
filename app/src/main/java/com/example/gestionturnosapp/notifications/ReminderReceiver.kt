@@ -40,7 +40,14 @@ class ReminderReceiver : BroadcastReceiver() {
         Log.d("ReminderReceiver", "Broadcast recibido: $action")
 
         if (action == Intent.ACTION_BOOT_COMPLETED) {
-            restoreAlarms()
+            val pendingResult = goAsync()
+            scope.launch {
+                try {
+                    restoreAlarms()
+                } finally {
+                    pendingResult.finish()
+                }
+            }
             return
         }
 
@@ -48,7 +55,14 @@ class ReminderReceiver : BroadcastReceiver() {
             val medId = intent.getStringExtra("MED_ID")
             val notifId = intent.getIntExtra("NOTIFICATION_ID", -1)
             if (medId != null) {
-                markAsTakenFromNotification(context, medId)
+                val pendingResult = goAsync()
+                scope.launch {
+                    try {
+                        markAsTakenFromNotification(context, medId)
+                    } finally {
+                        pendingResult.finish()
+                    }
+                }
             }
             if (notifId != -1) {
                 val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager

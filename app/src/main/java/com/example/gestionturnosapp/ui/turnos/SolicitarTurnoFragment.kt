@@ -347,7 +347,7 @@ class SolicitarTurnoFragment : Fragment() {
             true -> {
                 binding.btnConfirmarTurno.isEnabled = isFormFilled
                 binding.btnConfirmarTurno.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.primary))
-                binding.btnConfirmarTurno.text = getString(R.string.msg_slot_available)
+                binding.btnConfirmarTurno.text = getString(R.string.btn_confirm_appointment)
             }
             false -> {
                 binding.btnConfirmarTurno.isEnabled = false

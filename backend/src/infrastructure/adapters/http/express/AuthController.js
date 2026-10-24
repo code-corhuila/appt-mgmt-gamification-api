@@ -16,12 +16,20 @@ class AuthController {
 
     async login(req, res) {
         try {
+            const { email, contrasena } = req.body || {};
+            if (!email || !contrasena) {
+                return res.status(401).json({ mensaje: "Credenciales inválidas" });
+            }
             const result = await this.loginUser.execute(req.body);
             res.json({ mensaje: "OK", ...result });
         } catch (error) {
-            if (error.message === "Credenciales inválidas") {
+            if (error.message === "Credenciales inválidas" || error.message === "Faltan email o contraseña") {
                 return res.status(401).json({ mensaje: error.message });
             }
+            if (error.message === "Faltan datos obligatorios" || error.message === "Formato de email inválido") {
+                return res.status(400).json({ mensaje: error.message });
+            }
+            console.error("❌ Error en login:", error);
             res.status(500).json({ mensaje: "Error interno en el servidor", detalle: error.message });
         }
     }

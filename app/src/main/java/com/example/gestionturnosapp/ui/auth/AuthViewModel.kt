@@ -187,10 +187,8 @@ class AuthViewModel @Inject constructor(
         val context = getApplication<Application>()
         
         return when {
-            e is java.net.UnknownHostException -> 
+            e is java.net.UnknownHostException || e is java.net.ConnectException -> 
                 context.getString(R.string.msg_no_connection)
-            e is java.net.ConnectException -> 
-                context.getString(R.string.msg_server_error, exceptionName)
             errorMsg.contains("timeout", true) || errorMsg.contains("time out", true) -> 
                 context.getString(R.string.msg_timeout)
             else -> context.getString(R.string.msg_error_prefix, errorMsg.ifBlank { exceptionName })

@@ -31,7 +31,13 @@ class NetworkUtils @Inject constructor(
                         ?: (map["detalle"] as? String)
                     
                     if (serverMessage != null) {
-                        return if (code >= 500) context.getString(R.string.msg_server_error, serverMessage) else serverMessage
+                        return if (code >= 500) {
+                            if (serverMessage.contains("Error interno en el servidor", ignoreCase = true)) {
+                                context.getString(R.string.msg_server_error, "Por favor, intenta de nuevo en unos momentos")
+                            } else {
+                                context.getString(R.string.msg_server_error, serverMessage)
+                            }
+                        } else serverMessage
                     }
                 }
                 

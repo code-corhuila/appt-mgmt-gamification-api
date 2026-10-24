@@ -57,8 +57,20 @@ class EstudioRepository @Inject constructor(
     }
 
     suspend fun eliminarEstudio(id: String) {
-        val response = apiService.eliminarEstudio(id)
-        if (!response.isSuccessful) {
+        val response = try {
+            apiService.eliminarEstudio(id)
+        } catch (_: Exception) {
+            val current = offlineCacheManager.getCachedEstudios().toMutableList()
+            current.removeAll { it.id == id }
+            offlineCacheManager.saveEstudios(current)
+            return
+        }
+
+        if (response.isSuccessful) {
+            val current = offlineCacheManager.getCachedEstudios().toMutableList()
+            current.removeAll { it.id == id }
+            offlineCacheManager.saveEstudios(current)
+        } else {
             if (networkUtils.isSessionExpired(response)) {
                 throw Exception("SESSION_EXPIRED")
             }

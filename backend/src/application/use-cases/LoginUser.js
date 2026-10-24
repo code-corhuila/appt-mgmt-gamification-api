@@ -7,9 +7,13 @@ class LoginUser {
         this.secretKey = secretKey;
     }
 
-    async execute({ email, contrasena }) {
+    async execute({ email, contrasena } = {}) {
+        if (!email || !contrasena) {
+            throw new Error("Credenciales inválidas");
+        }
+
         const user = await this.userRepository.findByEmail(email);
-        if (!user) {
+        if (!user || !user.contrasena) {
             throw new Error("Credenciales inválidas");
         }
 

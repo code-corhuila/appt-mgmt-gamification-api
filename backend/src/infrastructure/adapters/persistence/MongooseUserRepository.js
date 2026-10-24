@@ -1,21 +1,27 @@
+const { connectDatabase } = require('../../../../config/dbConnections');
 const User = require('../../../../models/User');
 const UserEntity = require('../../../../src/domain/entities/User');
 const UserRepository = require('../../../../src/domain/ports/UserRepository');
 
 class MongooseUserRepository extends UserRepository {
     async findByEmail(email) {
+        if (!email) return null;
+        await connectDatabase();
         const userDoc = await User.findOne({ email });
         if (!userDoc) return null;
         return this._mapToEntity(userDoc);
     }
 
     async findById(id) {
+        if (!id) return null;
+        await connectDatabase();
         const userDoc = await User.findById(id);
         if (!userDoc) return null;
         return this._mapToEntity(userDoc);
     }
 
     async save(userEntity) {
+        await connectDatabase();
         const userDoc = new User({
             nombre: userEntity.nombre,
             email: userEntity.email,
@@ -34,6 +40,8 @@ class MongooseUserRepository extends UserRepository {
     }
 
     async update(id, userData) {
+        if (!id) return null;
+        await connectDatabase();
         const updatedDoc = await User.findByIdAndUpdate(id, userData, { new: true });
         if (!updatedDoc) return null;
         return this._mapToEntity(updatedDoc);
@@ -41,18 +49,18 @@ class MongooseUserRepository extends UserRepository {
 
     _mapToEntity(userDoc) {
         return new UserEntity({
-            id: userDoc._id,
+            id: userDoc._id ? userDoc._id.toString() : userDoc.id,
             nombre: userDoc.nombre,
             email: userDoc.email,
-            telefono: userDoc.telefono,
+            telefono: userDoc.telefono || "",
             contrasena: userDoc.contrasena,
-            isVerified: userDoc.isVerified,
-            verificationCode: userDoc.verificationCode,
-            fcmToken: userDoc.fcmToken,
-            tipoSanguineo: userDoc.tipoSanguineo,
-            alergias: userDoc.alergias,
-            condiciones: userDoc.condiciones,
-            contactoEmergencia: userDoc.contactoEmergencia,
+            isVerified: userDoc.isVerified || false,
+            verificationCode: userDoc.verificationCode || null,
+            fcmToken: userDoc.fcmToken || null,
+            tipoSanguineo: userDoc.tipoSanguineo || "",
+            alergias: userDoc.alergias || "",
+            condiciones: userDoc.condiciones || "",
+            contactoEmergencia: userDoc.contactoEmergencia || "",
             fechaCreacion: userDoc.fechaCreacion
         });
     }

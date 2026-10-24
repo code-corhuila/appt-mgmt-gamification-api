@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { connectDatabase } = require('../config/dbConnections');
 const authenticateToken = require('../middleware/auth');
 const rateLimit = require('express-rate-limit');
 
@@ -20,7 +21,7 @@ const authLimiter = rateLimit({
 // REGISTRO
 router.post('/register', authLimiter, async (req, res) => {
     try {
-        const { nombre, email, telefono, contrasena } = req.body;
+        const { nombre, email, telefono, contrasena } = req.body || {};
         if (!nombre || !email || !contrasena) {
             return res.status(400).json({ mensaje: "Faltan datos obligatorios" });
         }
@@ -36,6 +37,7 @@ router.post('/register', authLimiter, async (req, res) => {
             return res.status(400).json({ mensaje: "La contraseña debe tener al menos 6 caracteres" });
         }
 
+        await connectDatabase();
         const existe = await User.findOne({ email });
         if (existe) return res.status(400).json({ mensaje: "El email ya está registrado" });
 
@@ -61,17 +63,21 @@ router.post('/register', authLimiter, async (req, res) => {
 // LOGIN
 router.post('/login', authLimiter, async (req, res) => {
     try {
-        const { email, contrasena } = req.body;
+        const { email, contrasena } = req.body || {};
+        if (!email || !contrasena) {
+            return res.status(401).json({ mensaje: "Credenciales inválidas" });
+        }
+        await connectDatabase();
         const user = await User.findOne({ email });
-        if (!user || !await bcrypt.compare(contrasena, user.contrasena)) {
+        if (!user || !user.contrasena || !await bcrypt.compare(contrasena, user.contrasena)) {
             return res.status(401).json({ mensaje: "Credenciales inválidas" });
         }
 
-        const token = jwt.sign({ userId: user._id }, SECRET_KEY, { expiresIn: '30d' });
+        const token = jwt.sign({ userId: user._id.toString() }, SECRET_KEY, { expiresIn: '30d' });
         res.json({
             mensaje: "OK",
             usuario: {
-                id: user._id,
+                id: user._id.toString(),
                 nombre: user.nombre,
                 email: user.email,
                 telefono: user.telefono,

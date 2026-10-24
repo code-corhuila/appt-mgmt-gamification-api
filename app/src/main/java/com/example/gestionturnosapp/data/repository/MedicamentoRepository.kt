@@ -99,8 +99,20 @@ class MedicamentoRepository @Inject constructor(
     }
 
     suspend fun eliminarMedicamento(id: String) {
-        val response = apiService.eliminarMedicamento(id)
-        if (!response.isSuccessful) {
+        val response = try {
+            apiService.eliminarMedicamento(id)
+        } catch (_: Exception) {
+            val current = offlineCacheManager.getCachedMedicamentos().toMutableList()
+            current.removeAll { it.id == id }
+            offlineCacheManager.saveMedicamentos(current)
+            return
+        }
+
+        if (response.isSuccessful) {
+            val current = offlineCacheManager.getCachedMedicamentos().toMutableList()
+            current.removeAll { it.id == id }
+            offlineCacheManager.saveMedicamentos(current)
+        } else {
             if (networkUtils.isSessionExpired(response)) {
                 throw Exception("SESSION_EXPIRED")
             }
