@@ -10,6 +10,9 @@ class AuthController {
             const result = await this.registerUser.execute(req.body);
             res.status(201).json({ mensaje: "OK", email: result.email });
         } catch (error) {
+            if (error.message === "DATABASE_UNAVAILABLE" || error.message.includes("buffering timed out") || error.message.includes("selection timed out")) {
+                return res.status(503).json({ mensaje: "Servicio de base de datos no disponible temporalmente en el servidor" });
+            }
             res.status(400).json({ mensaje: error.message });
         }
     }
@@ -28,6 +31,9 @@ class AuthController {
             }
             if (error.message === "Faltan datos obligatorios" || error.message === "Formato de email inválido") {
                 return res.status(400).json({ mensaje: error.message });
+            }
+            if (error.message === "DATABASE_UNAVAILABLE" || error.message.includes("buffering timed out") || error.message.includes("selection timed out")) {
+                return res.status(503).json({ mensaje: "Servicio de base de datos no disponible temporalmente en el servidor" });
             }
             console.error("❌ Error en login:", error);
             res.status(500).json({ mensaje: "Error interno en el servidor", detalle: error.message });

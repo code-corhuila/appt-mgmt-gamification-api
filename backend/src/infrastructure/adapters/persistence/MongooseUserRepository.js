@@ -1,4 +1,4 @@
-const { connectDatabase } = require('../../../../config/dbConnections');
+const { ensureDatabaseConnected } = require('../../../../config/dbConnections');
 const User = require('../../../../models/User');
 const UserEntity = require('../../../../src/domain/entities/User');
 const UserRepository = require('../../../../src/domain/ports/UserRepository');
@@ -6,7 +6,7 @@ const UserRepository = require('../../../../src/domain/ports/UserRepository');
 class MongooseUserRepository extends UserRepository {
     async findByEmail(email) {
         if (!email) return null;
-        await connectDatabase();
+        await ensureDatabaseConnected();
         const userDoc = await User.findOne({ email });
         if (!userDoc) return null;
         return this._mapToEntity(userDoc);
@@ -14,14 +14,14 @@ class MongooseUserRepository extends UserRepository {
 
     async findById(id) {
         if (!id) return null;
-        await connectDatabase();
+        await ensureDatabaseConnected();
         const userDoc = await User.findById(id);
         if (!userDoc) return null;
         return this._mapToEntity(userDoc);
     }
 
     async save(userEntity) {
-        await connectDatabase();
+        await ensureDatabaseConnected();
         const userDoc = new User({
             nombre: userEntity.nombre,
             email: userEntity.email,
@@ -41,7 +41,7 @@ class MongooseUserRepository extends UserRepository {
 
     async update(id, userData) {
         if (!id) return null;
-        await connectDatabase();
+        await ensureDatabaseConnected();
         const updatedDoc = await User.findByIdAndUpdate(id, userData, { new: true });
         if (!updatedDoc) return null;
         return this._mapToEntity(updatedDoc);

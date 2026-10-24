@@ -54,6 +54,15 @@ function connectDatabase() {
     return databaseConnection.openUri(mongoUri, connectionOptions);
 }
 
+async function ensureDatabaseConnected() {
+    try {
+        await connectDatabase();
+    } catch (error) {
+        console.error("❌ Fallo de conexión a MongoDB:", error.message);
+        throw new Error("DATABASE_UNAVAILABLE");
+    }
+}
+
 function connectionStatus(connection) {
     return {
         0: 'disconnected',
@@ -93,6 +102,7 @@ module.exports = {
     databaseConnection,
     domainConnections,
     connectDatabase,
+    ensureDatabaseConnected,
     getDatabaseStatus,
     closeDatabase,
     authConnection: domainConnections.auth,
