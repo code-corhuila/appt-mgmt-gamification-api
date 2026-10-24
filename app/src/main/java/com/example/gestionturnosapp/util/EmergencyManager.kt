@@ -35,8 +35,13 @@ class EmergencyManager @Inject constructor(
                     val message = "¡EMERGENCIA! Necesito ayuda. Mi ubicación actual es: $mapsUrl"
                     
                     try {
-                        val smsManager = context.getSystemService(SmsManager::class.java)
-                        smsManager.sendTextMessage(trustedPhone, null, message, null, null)
+                        val smsManager = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                            context.getSystemService(SmsManager::class.java)
+                        } else {
+                            @Suppress("DEPRECATION")
+                            SmsManager.getDefault()
+                        }
+                        smsManager?.sendTextMessage(trustedPhone, null, message, null, null)
                         callback(true, "Alerta enviada con éxito a $trustedPhone")
                     } catch (e: Exception) {
                         Log.e("EmergencyManager", "Error enviando SMS", e)

@@ -174,13 +174,14 @@ class TurnoDetailFragment : Fragment() {
                 else -> getString(R.string.status_pending).uppercase()
             }
             
+            val safeContext = context ?: return
             val (statusBg, statusColor) = when {
                 isCompleted -> 
-                    R.drawable.bg_status_completed to androidx.core.content.ContextCompat.getColor(requireContext(), R.color.status_completed_text)
+                    R.drawable.bg_status_completed to androidx.core.content.ContextCompat.getColor(safeContext, R.color.status_completed_text)
                 isCancelled -> 
-                    R.drawable.bg_status_cancelled to androidx.core.content.ContextCompat.getColor(requireContext(), R.color.status_cancelled_text)
+                    R.drawable.bg_status_cancelled to androidx.core.content.ContextCompat.getColor(safeContext, R.color.status_cancelled_text)
                 else -> 
-                    R.drawable.bg_status_pending to androidx.core.content.ContextCompat.getColor(requireContext(), R.color.status_pending_text)
+                    R.drawable.bg_status_pending to androidx.core.content.ContextCompat.getColor(safeContext, R.color.status_pending_text)
             }
             
             tvDetailStatus.setBackgroundResource(statusBg)

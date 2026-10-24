@@ -36,7 +36,8 @@ class WelcomeFragment : Fragment() {
 
         try {
             val user = userManager.getUser()
-            if (user != null) {
+            val hasToken = !userManager.token.isNullOrBlank()
+            if (user != null && hasToken) {
                 // Postear la navegación para asegurar que el fragmento está listo
                 view.post {
                     if (isAdded && findNavController().currentDestination?.id == R.id.welcomeFragment) {
