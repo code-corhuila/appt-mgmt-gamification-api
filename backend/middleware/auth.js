@@ -38,6 +38,8 @@ const authenticateToken = async (req, res, next) => {
             }
             user = await response.json();
         } else {
+            const { connectDatabase } = require('../config/dbConnections');
+            await connectDatabase();
             const User = require('../models/User');
             user = await User.findById(decoded.userId);
             if (!user) return res.status(401).json({ mensaje: "Usuario ya no existe" });

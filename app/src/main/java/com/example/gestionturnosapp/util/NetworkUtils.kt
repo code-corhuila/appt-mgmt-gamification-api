@@ -32,11 +32,7 @@ class NetworkUtils @Inject constructor(
                     
                     if (serverMessage != null) {
                         return if (code >= 500) {
-                            if (serverMessage.contains("Error interno en el servidor", ignoreCase = true)) {
-                                context.getString(R.string.msg_server_error, "Por favor, intenta de nuevo en unos momentos")
-                            } else {
-                                context.getString(R.string.msg_server_error, serverMessage)
-                            }
+                            context.getString(R.string.msg_server_error, "Inconveniente temporal. Reintenta en unos momentos.")
                         } else serverMessage
                     }
                 }
@@ -45,9 +41,9 @@ class NetworkUtils @Inject constructor(
                 if (trimmedBody.contains("<!DOCTYPE html>", ignoreCase = true) || trimmedBody.contains("<html", ignoreCase = true)) {
                     android.util.Log.w("NetworkUtils", "Se recibió HTML en lugar de JSON (Código $code). Cuerpo: ${trimmedBody.take(200)}...")
                     return when (code) {
-                        502, 503, 504 -> context.getString(R.string.msg_server_error, "El servidor está iniciando o está sobrecargado")
+                        502, 503, 504 -> context.getString(R.string.msg_server_error, "El servidor está iniciando o sobrecargado")
                         403 -> "Acceso denegado por seguridad (Cloudflare)"
-                        else -> context.getString(R.string.msg_server_error, "Respuesta inesperada del servidor")
+                        else -> context.getString(R.string.msg_server_error, "Respuesta inesperada")
                     }
                 }
 

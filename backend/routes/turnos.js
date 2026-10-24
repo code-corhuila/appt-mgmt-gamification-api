@@ -2,22 +2,26 @@ const express = require('express');
 const router = express.Router();
 const Turno = require('../models/Turno');
 const User = require('../models/User');
+const { connectDatabase } = require('../config/dbConnections');
 const authenticateToken = require('../middleware/auth');
 const { sendPushNotification } = require('../middleware/notification');
 
 // OBTENER TURNOS DEL USUARIO
 router.get('/', authenticateToken, async (req, res) => {
     try {
+        await connectDatabase();
         const turnos = await Turno.find({ usuarioId: req.userId }).sort({ fecha: 1, hora: 1 });
         res.json(turnos);
     } catch (error) {
-        res.status(500).json({ mensaje: "Error al obtener turnos" });
+        console.error("❌ Error al obtener turnos:", error);
+        res.status(500).json({ mensaje: "Error al obtener turnos", detalle: error.message });
     }
 });
 
 // VERIFICAR DISPONIBILIDAD GLOBAL
 router.get('/check-availability', authenticateToken, async (req, res) => {
     try {
+        await connectDatabase();
         const { fecha, hora } = req.query;
         const turnoExistente = await Turno.findOne({
             fecha,
@@ -26,14 +30,16 @@ router.get('/check-availability', authenticateToken, async (req, res) => {
         });
         res.json({ disponible: !turnoExistente });
     } catch (error) {
-        res.status(500).json({ mensaje: "Error al verificar disponibilidad" });
+        console.error("❌ Error al verificar disponibilidad:", error);
+        res.status(500).json({ mensaje: "Error al verificar disponibilidad", detalle: error.message });
     }
 });
 
 // CREAR TURNO
 router.post('/', authenticateToken, async (req, res) => {
     try {
-        const { fecha, hora } = req.body;
+        await connectDatabase();
+        const { fecha, hora } = req.body || {};
 
         const ocupado = await Turno.findOne({
             fecha,
@@ -76,13 +82,14 @@ router.post('/', authenticateToken, async (req, res) => {
         res.status(201).json(nuevoTurno);
     } catch (error) {
         console.error("❌ Error al crear turno:", error);
-        res.status(500).json({ mensaje: "Error al crear turno", error: error.message });
+        res.status(500).json({ mensaje: "Error al crear turno", detalle: error.message });
     }
 });
 
 // ELIMINAR/CANCELAR TURNO
 router.delete('/:id', authenticateToken, async (req, res) => {
     try {
+        await connectDatabase();
         const turno = await Turno.findOne({ _id: req.params.id, usuarioId: req.userId });
         if (!turno) return res.status(404).json({ mensaje: "Turno no encontrado" });
 
@@ -104,7 +111,8 @@ router.delete('/:id', authenticateToken, async (req, res) => {
 
         res.status(200).send();
     } catch (error) {
-        res.status(500).json({ mensaje: "Error al eliminar" });
+        console.error("❌ Error al eliminar turno:", error);
+        res.status(500).json({ mensaje: "Error al eliminar turno", detalle: error.message });
     }
 });
 
