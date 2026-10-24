@@ -1,5 +1,5 @@
 db_password = "Turnos12345"
-mongodb_uri = "mongodb://PWEWyOoPU6UmBDLP:Admin123_Salud@ac-ar6llp8-shard-00-00.nvklgyh.mongodb.net:27017,ac-ar6llp8-shard-00-01.nvklgyh.mongodb.net:27017,ac-ar6llp8-shard-00-02.nvklgyh.mongodb.net:27017/SaludActiva?ssl=true&replicaSet=atlas-251k2p-shard-0&authSource=admin&appName=Cluster0"
+mongodb_uri = "mongodb+srv://PWEWyOoPU6UmBDLP:w8isg2NEa4969yFm@cluster0.nvklgyh.mongodb.net/SaludActiva?retryWrites=true&w=majority"
 jwt_secret  = "SaludActiva_Secret_Key_2024_Token_Security"
 email_user  = "ayara-2022a@corhuila.edu.co"
 email_password = "pqxgueeiduezcexv"
