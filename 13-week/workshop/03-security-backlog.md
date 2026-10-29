@@ -1,8 +1,8 @@
-# CP3 — Security Backlog & User Stories
+# CP3 & CP7 — Security Backlog & Refined User Stories
 
 > **Author:** Brayan Yara (`@BrayanYara1`)  
 > **System:** Salud Activa Ecosystem  
-> **Target Release:** Sprint Security Backlog (MVP 2 Closeout)
+> **Target Release:** Sprint Security Backlog (MVP 2 Closeout & Refinement)
 
 ---
 
