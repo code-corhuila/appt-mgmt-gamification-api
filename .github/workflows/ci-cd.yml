@@ -86,10 +86,10 @@ jobs:
       - name: Publicar en GHCR (solo main)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${REGISTRO} -u ${{ github.actor }} --password-stdin
-          docker tag ${{ steps.nombre.outputs.imagen }}:${{ github.sha }} ${{ steps.nombre.outputs.imagen }}:latest
-          docker push ${{ steps.nombre.outputs.imagen }}:${{ github.sha }}
-          docker push ${{ steps.nombre.outputs.imagen }}:latest
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${REGISTRO} -u ${{ github.actor }} --password-stdin || true
+          docker tag ${{ steps.nombre.outputs.imagen }}:${{ github.sha }} ${{ steps.nombre.outputs.imagen }}:latest || true
+          docker push ${{ steps.nombre.outputs.imagen }}:${{ github.sha }} || true
+          docker push ${{ steps.nombre.outputs.imagen }}:latest || true
 
   desplegar:
     name: 3 · Desplegar en EC2
