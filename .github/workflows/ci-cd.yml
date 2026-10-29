@@ -76,7 +76,6 @@ jobs:
 
       - name: DevSecOps · Escaneo de vulnerabilidades Trivy
         uses: aquasecurity/trivy-action@v0.28.0
-        continue-on-error: true
         with:
           image-ref: '${{ steps.nombre.outputs.imagen }}:${{ github.sha }}'
           format: 'table'
@@ -86,12 +85,11 @@ jobs:
 
       - name: Publicar en GHCR (solo main)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        continue-on-error: true
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${REGISTRO} -u ${{ github.actor }} --password-stdin || true
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${REGISTRO} -u ${{ github.actor }} --password-stdin
           docker tag ${{ steps.nombre.outputs.imagen }}:${{ github.sha }} ${{ steps.nombre.outputs.imagen }}:latest
-          docker push ${{ steps.nombre.outputs.imagen }}:${{ github.sha }} || true
-          docker push ${{ steps.nombre.outputs.imagen }}:latest || true
+          docker push ${{ steps.nombre.outputs.imagen }}:${{ github.sha }}
+          docker push ${{ steps.nombre.outputs.imagen }}:latest
 
   desplegar:
     name: 3 · Desplegar en EC2
