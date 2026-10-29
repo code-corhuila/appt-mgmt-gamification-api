@@ -47,14 +47,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Prepare Environment File
+        run: cp .env.example .env
+
       - name: Validate Local Compose File
         run: docker compose -f compose.yml config --quiet
 
       - name: Validate Production Compose File
         run: docker compose -f compose.prod.yml config --quiet
 
-      - name: Build Docker Stack
-        run: docker compose build
+      - name: Build Local Docker Stack
+        run: docker compose -f compose.yml build
 
   security-scan:
     name: 🛡️ Security Vulnerability Scan (Trivy)
