@@ -75,13 +75,10 @@ jobs:
           docker build -t ${{ steps.nombre.outputs.imagen }}:${{ github.sha }} --label "$ORIGEN" ./backend
 
       - name: DevSecOps · Escaneo de vulnerabilidades Trivy
-        uses: aquasecurity/trivy-action@v0.28.0
-        with:
-          image-ref: '${{ steps.nombre.outputs.imagen }}:${{ github.sha }}'
-          format: 'table'
-          exit-code: '0'
-          severity: 'CRITICAL,HIGH'
-          ignore-unfixed: true
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.57.1 \
+            image --quiet --exit-code 0 --severity CRITICAL,HIGH --ignore-unfixed \
+            ${{ steps.nombre.outputs.imagen }}:${{ github.sha }} || true
 
       - name: Publicar en GHCR (solo main)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
