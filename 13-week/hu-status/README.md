@@ -1,20 +1,21 @@
-# Weekly Status Report — Semana 13 (Threat Modeling & Security Backlog)
+# Weekly Status Report — Semana 13 (Threat Modeling & Security Backlog Closeout)
 
 > **Student:** Brayan Yara (`@BrayanYara1`)  
 > **Role:** Full Stack & DevOps Lead  
 > **Course:** Sistemas Distribuidos 2026-B · Corte 3  
 > **Date:** October 2026  
-> **Project:** Salud Activa — Distributed Medical Appointment System
+> **Project:** Salud Activa — Distributed Medical Appointment System  
+> **Status:** Final Deliverable Complete (CP0 - CP9)
 
 ---
 
 ## 1. Executive Summary
 
-During Week 13, I completed the threat modeling analysis for the **Salud Activa** system focused on **Trust Boundary TB1** (Untrusted Mobile Client to API Gateway `backend:3000`). I mapped the attack surface, conducted a STRIDE evaluation, formulated 3 prioritized security user stories in the backlog, created a GitHub Actions security workflow, and implemented automated negative authorization tests.
+In Week 13, I conducted a complete threat modeling analysis for the **Salud Activa** system focused on **Trust Boundary TB1** (Untrusted Mobile Client to API Gateway `backend:3000`). I mapped the attack surface, executed a STRIDE assessment, formulated 3 prioritized security user stories, created CI/CD security quality gates with Jest negative authorization tests, and established a security implementation plan.
 
 ---
 
-## 2. Checkpoint Execution Checklist
+## 2. Complete Checkpoint Execution Summary
 
 | Checkpoint | Task Description | Artifact / Location | Status |
 | :--- | :--- | :--- | :---: |
@@ -23,7 +24,11 @@ During Week 13, I completed the threat modeling analysis for the **Salud Activa*
 | **CP2** | STRIDE Threat Model Analysis | [`docs/05-architecture/security/stride-BrayanYara1.md`](../../docs/05-architecture/security/stride-BrayanYara1.md) | DONE ✅ |
 | **CP3** | Security Backlog & User Stories | [`13-week/workshop/03-security-backlog.md`](../workshop/03-security-backlog.md) | DONE ✅ |
 | **CP4** | Security Pipeline & Negative Test | [`13-week/workshop/04-security-ci/`](../workshop/04-security-ci/) | DONE ✅ |
-| **CP5** | Peer Review & Weekly Wrap-up | [`13-week/hu-status/README.md`](README.md) | DONE ✅ |
+| **CP5** | Peer Review & Initial Status | [`13-week/hu-status/README.md`](README.md) | DONE ✅ |
+| **CP6** | STRIDE Refinement & Review Address | [`docs/05-architecture/security/stride-BrayanYara1.md`](../../docs/05-architecture/security/stride-BrayanYara1.md) | DONE ✅ |
+| **CP7** | Security Backlog Refinement | [`13-week/workshop/03-security-backlog.md`](../workshop/03-security-backlog.md) | DONE ✅ |
+| **CP8** | Negative Test Output & Validation | [`13-week/workshop/04-security-ci/HOW-TO-RUN.md`](../workshop/04-security-ci/HOW-TO-RUN.md) | DONE ✅ |
+| **CP9** | Implementation Plan & Final Closeout | [`13-week/hu-status/README.md`](README.md) | DONE ✅ |
 
 ---
 
