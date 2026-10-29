@@ -19,13 +19,11 @@ FROM node:22-alpine
 ENV NODE_ENV=production
 WORKDIR /app
 
-# Copiar solo lo necesario desde la etapa de construcción
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app ./
+# Copiar archivos y dependencias desde la etapa de construcción
+COPY --from=builder /app /app
 
 # Eliminar dependencias de desarrollo para reducir la imagen
-RUN npm prune --omit=dev
+RUN npm prune --omit=dev && chown -R node:node /app
 
 # Usar un usuario no raíz por seguridad (la imagen de node ya trae el usuario 'node')
 USER node
