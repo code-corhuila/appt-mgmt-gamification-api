@@ -2,6 +2,15 @@
 
 Notable changes to Salud Activa are recorded here.
 
+## [3.0.0] - 2026-10-29
+
+### Added
+- Production-grade Observability: Trace propagation (`x-trace-id`), structured JSON log contract, `/metrics` endpoint with OpenTelemetry format, defined SLOs and fast-burn alert rules.
+- Threat Modeling & DevSecOps Security: STRIDE threat model on Trust Boundary TB1 (API Gateway), IP & User rate limiting middleware, payload schema validation, RBAC security gates, and automated Trivy container security scanning in CI/CD.
+- Saga Pattern & Chaos Engineering: Transactional Outbox pattern with RabbitMQ event bus, compensating saga transactions (`appointment.cancelled.v1`), and demo failure injection via `/api/demo/fail-next-saga` showing graceful degradation.
+- Production CI/CD Pipeline: GitHub Actions workflow with Docker image validation, Trivy security gate, GHCR package publishing, and EC2 deployment trigger.
+- Complete documentation suite: Updated ADRs, Threat Model (STRIDE), Security Backlog, Observability Runbooks, and Sustentación Guide.
+
 ## [2.0.0] - 2026-10-08
 
 ### Added

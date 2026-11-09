@@ -1,7 +1,7 @@
-# Release v2.0.0 - Control de Commits y Entregables
+# Release v3.0.0 - Control de Commits y Entregables (MVP 3 / Corte 3)
 
-**Fecha de Entrega:** 13 de Octubre  
-**Tag de Release:** `v2.0.0`
+**Fecha de Entrega:** 29 de Octubre  
+**Tag de Release:** `v3.0.0`
 
 ---
 
@@ -9,18 +9,17 @@
 
 | Repositorio | Tag | Commit ID (Hash) | Descripción |
 | :--- | :--- | :--- | :--- |
-| **GestionTurnosApp** (Backend & Android App) | `v2.0.0` | `89af5bd778d87066f9a1e8df6502f664c2ecff96` | MVP 2 Release Final con orquestación de microservicios, RabbitMQ, Docker Compose y CI/CD configurado. |
-| *(Repo Frontend / Portal adicional si aplica)* | `v2.0.0` | `<commit-id-repo-2>` | *(Completar si se utiliza un segundo repositorio)* |
+| **ProyectoDistribuidos2026** (Backend, Android & Web) | `v3.0.0` | `da3a25e5a9a0ef0e3cb87a2c5f8cf7159160ab9f` | Release Final MVP 3 - Corte 3: Observabilidad, Seguridad DevSecOps (STRIDE/Trivy), Saga + Outbox, Chaos Engineering y CI/CD. |
 
 ---
 
 ## 📦 Generación de Entregables (.zip sin `node_modules`)
 
-Para generar el archivo `.zip` del código fuente limpio para la entrega en `c2-release`:
+Para generar el archivo `.zip` del código fuente limpio para la entrega:
 
 ```bash
 # Comando git archive (excluye automáticamente node_modules y archivos no rastreados)
-git archive --format=zip --output=GestionTurnosApp-v2.0.0.zip v2.0.0
+git archive --format=zip --output=GestionTurnosApp-v3.0.0.zip v3.0.0
 ```
 
 > **Nota:** Alternativamente, el archivo `.zip` se puede descargar directamente desde GitHub en la sección **Releases -> Source code (zip)** del tag `v2.0.0`.
