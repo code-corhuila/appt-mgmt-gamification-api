@@ -1,6 +1,6 @@
 # Salud Activa · Gestión de Bienestar Médico
 
-> **Demo del Corte 3 de Arquitectura de Software (CORHUILA):** Evolución de una plataforma monolítica hacia una arquitectura de microservicios contenerizada con API Gateway, patrón **Saga** con compensación, **Outbox**, eventos distribuidos vía RabbitMQ y pipeline de CI/CD automatizado.
+> **Demo del Corte 3 de Sistemas Distribuidos (CORHUILA):** Evolución de una plataforma monolítica hacia una arquitectura de microservicios contenerizada con API Gateway, patrón **Saga** con compensación, **Outbox**, eventos distribuidos vía RabbitMQ y pipeline de CI/CD automatizado.
 
 ---
 
