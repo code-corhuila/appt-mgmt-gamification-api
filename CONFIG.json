@@ -7,12 +7,12 @@
     "term": "2026-2"
   },
   "corte": {
-    "number": 2,
+    "number": 3,
     "max_grade": 5.0,
     "weight_percentage": 30,
-    "sprint_goal": "Deliver MVP 2 - Distributed Microservices, Event Outbox, Saga Compensation & Local Resilience",
-    "total_story_points": 24,
-    "release_tag": "v2.0.0"
+    "sprint_goal": "Deliver MVP 3 - Observability, Zero-Downtime Deployment, Security (STRIDE/Trivy), CI/CD and Proven Resilience (Load + Chaos)",
+    "total_story_points": 32,
+    "release_tag": "v3.0.0"
   },
   "grading_pattern": {
     "weekly_report_format": "NN-week/hu-status/README.md",
@@ -48,10 +48,22 @@
       "hu": "HU-MVP2-05",
       "path": "10-week/hu-status/README.md",
       "status": "DONE"
+    },
+    {
+      "week": "11-week",
+      "hu": "HU-MVP3-01",
+      "path": "11-week/hu-status/README.md",
+      "status": "DONE"
+    },
+    {
+      "week": "13-week",
+      "hu": "HU-MVP3-02",
+      "path": "13-week/hu-status/README.md",
+      "status": "DONE"
     }
   ],
   "evidence": {
     "anexos_planos": "ANEXOS_PLANOS_EVIDENCIA.md",
-    "soportes_entrega": "SOPORTES_ENTREGA.md"
+    "soportes_entrega": "ENTREGA_MVP3_CORTE3_SUSTENTACION.md"
   }
 }

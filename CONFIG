@@ -1,4 +1,4 @@
-# SALUD ACTIVA - PROFILE & REPOSITORY CONFIGURATION (CORTE 2: c2-sprints)
+# SALUD ACTIVA - PROFILE & REPOSITORY CONFIGURATION (CORTE 3: c3-sprints)
 
 [STUDENT_PROFILE]
 STUDENT_NAME=Brayan Yara
@@ -13,14 +13,14 @@ REPOSITORY_NAME=ProyectoDistribuidos2026
 PRIMARY_BRANCH=main
 DEVELOPMENT_BRANCH=develop
 QA_BRANCH=qa
-FEATURE_BRANCH=hu-mvp2-dev
-RELEASE_TAG=v2.0.0
+FEATURE_BRANCH=hu-status
+RELEASE_TAG=v3.0.0
 
 [CORTE_CONFIG]
-CORTE_NUMBER=2
+CORTE_NUMBER=3
 GRADE_TARGET=5.0
-SPRINT_GOAL=Deliver MVP 2 - Distributed Architecture, Microservices, Event Outbox, Saga Compensation & Local Resilience
-TOTAL_STORY_POINTS=24
+SPRINT_GOAL=Deliver MVP 3 - Observability, Zero-Downtime Deployment, Security (STRIDE/Trivy), CI/CD and Proven Resilience (Load + Chaos)
+TOTAL_STORY_POINTS=32
 REPORT_PATH_PATTERN=NN-week/hu-status/README.md
 
 [WEEKS]
@@ -29,7 +29,9 @@ WEEK_07=07-week/hu-status/README.md
 WEEK_08=08-week/hu-status/README.md
 WEEK_09=09-week/hu-status/README.md
 WEEK_10=10-week/hu-status/README.md
+WEEK_11=11-week/hu-status/README.md
+WEEK_13=13-week/hu-status/README.md
 
 [EVIDENCE]
 ANEXOS_EVIDENCIA=ANEXOS_PLANOS_EVIDENCIA.md
-SOPORTES_ENTREGA=SOPORTES_ENTREGA.md
+SOPORTES_ENTREGA=ENTREGA_MVP3_CORTE3_SUSTENTACION.md
