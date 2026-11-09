@@ -1,6 +1,6 @@
 # 🚀 Guía de Sustentación y Entrega Final — Release MVP 3 (Corte 3)
 
-**Asignatura:** Sistemas Distribuidos / Arquitectura de Software  
+**Asignatura:** Sistemas Distribuidos  
 **Institución:** Corporación Universitaria del Huila (CORHUILA)  
 **Estudiante:** Brayan Yara (`@BrayanYara1`)  
 **Proyecto:** Salud Activa — Sistema Distribuido de Gestión de Bienestar Médico  

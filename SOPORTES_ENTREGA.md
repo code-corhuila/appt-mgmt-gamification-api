@@ -2,7 +2,7 @@
 
 **Estudiante:** Brayan Yara (`BrayanYara1`)  
 **Rol:** Full Stack Developer & DevOps Lead  
-**Asignatura:** Sistemas Distribuidos / Arquitectura de Software  
+**Asignatura:** Sistemas Distribuidos  
 **Corte Académico:** Corte 2 (Semanas 6 a 10)  
 **Proyecto:** Salud Activa (GestionTurnosApp) — MVP 2  
 

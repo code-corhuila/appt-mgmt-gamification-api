@@ -12,7 +12,7 @@
 | **Student Name** | Brayan Yara |
 | **GitHub Username** | `BrayanYara1` |
 | **Role** | Full Stack & DevOps Lead |
-| **Course** | Sistemas Distribuidos / Arquitectura de Software |
+| **Course** | Sistemas Distribuidos |
 | **Academic Term** | 2026-2 |
 
 ---

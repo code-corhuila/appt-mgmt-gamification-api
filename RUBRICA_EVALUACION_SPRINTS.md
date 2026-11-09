@@ -2,7 +2,7 @@
 
 **Estudiante:** Brayan Yara (`BrayanYara1`)  
 **Rol:** Full Stack Developer & DevOps Lead  
-**Asignatura:** Sistemas Distribuidos / Arquitectura de Software (2026-2)  
+**Asignatura:** Sistemas Distribuidos (2026-2)  
 **Corte Académico:** Corte 2 (Sprints: 30% de la nota del proyecto)  
 **Calificación Objetivo:** 5.0 / 5.0  
 
