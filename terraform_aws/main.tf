@@ -221,7 +221,7 @@ resource "aws_cloudwatch_log_group" "ecs_logs" {
   retention_in_days = 7
 }
 
-# 10. Security Group para el Contenedor (Permite tráfico desde el ALB y directo)
+# 10. Security Group para el Contenedor (Permite tráfico únicamente desde el ALB)
 resource "aws_security_group" "ecs_sg" {
   name   = "ecs-security-group"
   vpc_id = aws_vpc.main_vpc.id
@@ -230,7 +230,7 @@ resource "aws_security_group" "ecs_sg" {
     from_port       = 3000 # Puerto de Node.js
     to_port         = 3000
     protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"] # CAMBIO: Permitir acceso desde cualquier red para pruebas
+    security_groups = [aws_security_group.alb_sg.id] # Acceso restringido al Load Balancer
   }
 
   egress {
@@ -333,17 +333,17 @@ resource "aws_appautoscaling_policy" "ecs_policy_cpu" {
   }
 }
 
-# 1. Crear un Grupo de Seguridad (Firewall) para la Base de Datos
+# 1. Crear un Grupo de Seguridad (Firewall) para la Base de Datos (Acceso Restringido al Backend)
 resource "aws_security_group" "db_sg" {
   name        = "db-security-group"
   vpc_id      = aws_vpc.main_vpc.id
 
-  # Permitir entrada de datos (Puerto 5432 para PostgreSQL) desde cualquier red
+  # Permitir entrada de datos (Puerto 5432) únicamente desde los contenedores ECS
   ingress {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"] # CAMBIO: Permitir acceso externo para gestión
+    security_groups = [aws_security_group.ecs_sg.id] # Seguridad: solo el backend puede conectarse
   }
 
   egress {
@@ -357,17 +357,19 @@ resource "aws_security_group" "db_sg" {
 # 2. Crear la Base de Datos RDS (PostgreSQL)
 resource "aws_db_instance" "gestion_turnos_db" {
   allocated_storage      = 20
+  max_allocated_storage  = 20 # Limite máximo de autoscaling para evitar cobros sorpresa
   engine                 = "postgres"
   engine_version         = "15"
-  instance_class         = "db.t3.micro"
+  instance_class         = "db.t3.micro" # Incluido en AWS Free Tier
   db_name                = "gestion_turnos"
   username               = "admin_turnos"
   password               = var.db_password
   parameter_group_name   = "default.postgres15"
   skip_final_snapshot    = true
-  publicly_accessible    = true # CAMBIO: Permitir acceso desde internet
+  publicly_accessible    = false # Seguridad: no exponer DB directamente a internet
+  storage_encrypted      = true  # Seguridad: cifrado de disco en reposo
   vpc_security_group_ids = [aws_security_group.db_sg.id]
-  db_subnet_group_name   = aws_db_subnet_group.db_subnet_group.name # Agregamos esto
+  db_subnet_group_name   = aws_db_subnet_group.db_subnet_group.name
 }
 
 # --- OUTPUTS: DATOS PARA CONFIGURAR TU APP ---
