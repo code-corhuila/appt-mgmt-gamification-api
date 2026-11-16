@@ -1,6 +1,14 @@
 # Backend - Salud Activa
 
-Backend Node.js/Express compuesto por el API Gateway, Auth Service y Appointments Service.
+Backend Node.js/Express compuesto por el API Gateway, Auth Service, Appointments Service y
+Gamification Service.
+
+El API Gateway enruta `GET /api/achievements` al Gamification Service. El endpoint requiere un
+JWT válido y lista los logros disponibles con el progreso del usuario a partir de sus turnos,
+medicamentos y estudios. El servicio se ejecuta en el puerto interno `3003`.
+
+Los logros iniciales son hitos de primer registro. El estado se calcula desde los registros
+vigentes del usuario, por lo que un turno cancelado o compensado no cuenta como obtenido.
 
 ## Ejecucion local integrada
 

@@ -3,6 +3,7 @@ const request = require('supertest');
 
 const originalAuthServiceUrl = process.env.AUTH_SERVICE_URL;
 const originalAppointmentsServiceUrl = process.env.APPOINTMENTS_SERVICE_URL;
+const originalGamificationServiceUrl = process.env.GAMIFICATION_SERVICE_URL;
 let downstream;
 let app;
 let received;
@@ -25,6 +26,7 @@ beforeAll(async () => {
     const target = `http://127.0.0.1:${downstream.address().port}`;
     process.env.AUTH_SERVICE_URL = target;
     process.env.APPOINTMENTS_SERVICE_URL = target;
+    process.env.GAMIFICATION_SERVICE_URL = target;
     app = require('../server');
 });
 
@@ -34,6 +36,8 @@ afterAll(async () => {
     else process.env.AUTH_SERVICE_URL = originalAuthServiceUrl;
     if (originalAppointmentsServiceUrl === undefined) delete process.env.APPOINTMENTS_SERVICE_URL;
     else process.env.APPOINTMENTS_SERVICE_URL = originalAppointmentsServiceUrl;
+    if (originalGamificationServiceUrl === undefined) delete process.env.GAMIFICATION_SERVICE_URL;
+    else process.env.GAMIFICATION_SERVICE_URL = originalGamificationServiceUrl;
 });
 
 describe('API gateway service routing', () => {
@@ -57,6 +61,16 @@ describe('API gateway service routing', () => {
 
         expect(response.status).toBe(202);
         expect(received.url).toBe('/api/turnos/check-availability?fecha=2026-10-10&hora=09%3A00');
+    });
+
+    it('forwards achievement paths to the Gamification service', async () => {
+        const response = await request(app).get('/api/achievements?view=all');
+
+        expect(response.status).toBe(202);
+        expect(received).toMatchObject({
+            method: 'GET',
+            url: '/api/achievements?view=all'
+        });
     });
 
     it('routes the local demo failure control to Appointments', async () => {

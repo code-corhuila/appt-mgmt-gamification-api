@@ -6,7 +6,7 @@
 
 ## 📌 Arquitectura del Sistema
 
-El ecosistema **Salud Activa** desacopla la lógica de autenticación y gestión de turnos médicos en microservicios independientes que ejecutan en contenedores isolados detrás de un **API Gateway**, cada uno siendo dueño de su base de datos lógica MongoDB (Anexo J).
+El ecosistema **Salud Activa** desacopla la lógica de autenticación, gestión de turnos y logros en microservicios independientes detrás de un **API Gateway**.
 
 ```mermaid
 flowchart TD
@@ -22,11 +22,14 @@ flowchart TD
     subgraph Servicios ["⚙️ Microservicios"]
         AUTH[Auth Service<br/>Node.js / Express :3001]
         APP[Appointments Service<br/>Node.js / Express :3002]
+        GAME[Gamification Service<br/>Node.js / Express :3003]
     end
 
     subgraph Persistencia ["💾 Datos & Eventos"]
         MDB_AUTH[(MongoDB Auth<br/>'SaludActiva')]
-        MDB_APP[(MongoDB Turnos<br/>'SaludActiva')]
+        MDB_TURNOS[(MongoDB Turnos<br/>'SaludActiva')]
+        MDB_MED[(MongoDB Medicamentos<br/>'SaludActiva')]
+        MDB_STUDY[(MongoDB Estudios<br/>'SaludActiva')]
         RMQ{{RabbitMQ Broker<br/>Event Bus :5672}}
     end
 
@@ -35,9 +38,13 @@ flowchart TD
 
     GW -->|Enruta /api/auth/*| AUTH
     GW -->|Enruta /api/turnos/*| APP
+    GW -->|Enruta /api/achievements/*| GAME
 
     AUTH --> MDB_AUTH
-    APP --> MDB_APP
+    APP --> MDB_TURNOS
+    GAME -->|Consulta progreso por usuario| MDB_TURNOS
+    GAME --> MDB_MED
+    GAME --> MDB_STUDY
 
     APP -->|Saga / Outbox Events| RMQ
     AUTH -.->|Verifica reservas| APP
@@ -49,9 +56,9 @@ flowchart TD
 
 | Entorno / Modo | Comandos | Dirección / Acceso |
 | :--- | :--- | :--- |
-| **Docker Compose (Recomendado)** | `Copy-Item .env.example .env`<br/>`docker compose up --build -d` | API Gateway: `http://localhost:3000`<br/>Auth: `http://localhost:3001`<br/>Turnos: `http://localhost:3002` |
+| **Docker Compose (Recomendado)** | `Copy-Item .env.example .env`<br/>`docker compose up --build -d` | API Gateway: `http://localhost:3000`<br/>Logros por Gateway: `http://localhost:3000/api/achievements` |
 | **Backend Local (Node.js)** | `cd backend`<br/>`npm ci`<br/>`npm start` | `http://localhost:3000` |
-| **Pruebas Automatizadas** | `cd backend`<br/>`npm test` | 25 pruebas unitarias, de contrato y Saga pasando al 100% |
+| **Pruebas Automatizadas** | `cd backend`<br/>`npm test` | 35 pruebas de API, contrato, servicio y Saga |
 | **App Android (`/app`)** | Abrir proyecto en Android Studio → Sync Gradle → Run | Conecta por defecto a `http://10.0.2.2:3000` (Emulador) o Backend Público |
 
 > **Nota para Docker:** Para apagar los servicios manteniendo los datos, ejecuta `docker compose down`. Para reiniciar limpiando los volúmenes, ejecuta `docker compose down -v`.
@@ -65,11 +72,12 @@ Todos los endpoints principales están expuestos y consolidados a través del AP
 | Método y Ruta | Descripción | Respuestas HTTP |
 | :--- | :--- | :--- |
 | `GET /health/live` | Estado de liveness (supervivencia del contenedor) | `200` |
-| `GET /health/ready` | Estado de readiness (verifica MongoDB, RabbitMQ y contratos) | `200` · `503` |
+| `GET /health/ready` | Estado de readiness (verifica MongoDB, RabbitMQ y servicios dependientes) | `200` · `503` |
 | `POST /api/auth/register` | Registro de nuevos usuarios/pacientes | `201` · `400` · `409` |
 | `POST /api/auth/login` | Autenticación y generación de token JWT | `200` · `401` |
 | `GET /api/turnos` | Obtención de catálogo de turnos médicos disponibles | `200` · `500` |
 | `POST /api/turnos` | Reserva de turno mediante **Saga de Reserva** | `201` · `400` · `409` · `500` |
+| `GET /api/achievements` | Consulta logros disponibles y progreso del usuario autenticado | `200` · `401` · `403` · `503` |
 | `POST /api/demo/fail-next-saga` | Inyección de fallo para demostración de compensación de Saga | `200` |
 
 ---
