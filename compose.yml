@@ -79,6 +79,30 @@ services:
       retries: 5
       start_period: 20s
 
+  gamification-service:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    command: ["node", "services/gamification-service/server.js"]
+    environment:
+      GAMIFICATION_PORT: 3003
+      MONGODB_URI: mongodb://mongodb:27017/SaludActiva
+      JWT_SECRET: ${JWT_SECRET:-local-development-jwt-secret-change-before-deploy}
+      SERVICE_TOKEN: ${SERVICE_TOKEN:-local-development-service-token}
+      AUTH_SERVICE_URL: http://auth-service:3001
+      NODE_ENV: development
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3003/health/ready').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+
   backend:
     build:
       context: ./backend
@@ -90,6 +114,7 @@ services:
       SERVICE_TOKEN: ${SERVICE_TOKEN:-local-development-service-token}
       AUTH_SERVICE_URL: http://auth-service:3001
       APPOINTMENTS_SERVICE_URL: http://appointments-service:3002
+      GAMIFICATION_SERVICE_URL: http://gamification-service:3003
       NODE_ENV: development
     ports:
       - "${BACKEND_PORT:-3000}:3000"
@@ -99,6 +124,8 @@ services:
       auth-service:
         condition: service_healthy
       appointments-service:
+        condition: service_healthy
+      gamification-service:
         condition: service_healthy
     healthcheck:
       test:

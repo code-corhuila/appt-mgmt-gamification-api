@@ -70,6 +70,29 @@ services:
       timeout: 5s
       retries: 3
 
+  gamification-service:
+    build:
+      context: ./backend
+    restart: always
+    command: ["node", "services/gamification-service/server.js"]
+    environment:
+      GAMIFICATION_PORT: 3003
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongodb:27017/SaludActivaProd}
+      JWT_SECRET: ${JWT_SECRET:-production-jwt-secret-placeholder-change-in-env}
+      SERVICE_TOKEN: ${SERVICE_TOKEN:-production-service-token-placeholder-change-in-env}
+      AUTH_SERVICE_URL: http://auth-service:3001
+      NODE_ENV: production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3003/health/ready').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
   backend:
     build:
       context: ./backend
@@ -81,6 +104,7 @@ services:
       SERVICE_TOKEN: ${SERVICE_TOKEN:-production-service-token-placeholder-change-in-env}
       AUTH_SERVICE_URL: http://auth-service:3001
       APPOINTMENTS_SERVICE_URL: http://appointments-service:3002
+      GAMIFICATION_SERVICE_URL: http://gamification-service:3003
       NODE_ENV: production
     ports:
       - "${BACKEND_PORT:-3000}:3000"
@@ -90,6 +114,8 @@ services:
       auth-service:
         condition: service_healthy
       appointments-service:
+        condition: service_healthy
+      gamification-service:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health/live').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]

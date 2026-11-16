@@ -54,6 +54,9 @@ if (process.env.APPOINTMENTS_SERVICE_URL) {
     app.use('/api/turnos', proxyTo(process.env.APPOINTMENTS_SERVICE_URL));
     app.use('/api/demo', proxyTo(process.env.APPOINTMENTS_SERVICE_URL));
 }
+if (process.env.GAMIFICATION_SERVICE_URL) {
+    app.use('/api/achievements', proxyTo(process.env.GAMIFICATION_SERVICE_URL));
+}
 
 app.use(express.json());
 
@@ -68,6 +71,7 @@ const medicamentoRoutes = require('./routes/medicamentos');
 const estudioRoutes = require('./routes/estudios');
 const adminRoutes = require('./routes/admin');
 const chatRoutes = require('./routes/chat');
+const achievementsRoutes = require('./routes/achievements');
 
 // --- USAR RUTAS ---
 app.use('/api/auth', authRoutes);
@@ -76,6 +80,7 @@ app.use('/api/medicamentos', medicamentoRoutes);
 app.use('/api/estudios', estudioRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/achievements', achievementsRoutes);
 
 // --- ROOT & LISTEN ---
 app.get('/', (req, res) => {
@@ -103,7 +108,8 @@ app.get('/health/ready', async (req, res) => {
     const dependencies = {};
     for (const [name, serviceUrl] of Object.entries({
         auth: process.env.AUTH_SERVICE_URL,
-        appointments: process.env.APPOINTMENTS_SERVICE_URL
+        appointments: process.env.APPOINTMENTS_SERVICE_URL,
+        gamification: process.env.GAMIFICATION_SERVICE_URL
     })) {
         if (!serviceUrl) continue;
         try {
@@ -135,7 +141,7 @@ if (require.main === module) {
 
     const server = app.listen(PORT, '0.0.0.0', () => {
         console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
-        console.log(`📡 Rutas cargadas: Auth, Turnos, Medicamentos, Estudios, Admin`);
+        console.log(`📡 Rutas cargadas: Auth, Turnos, Medicamentos, Estudios, Admin y Logros`);
     });
 
     const shutdown = signal => {
