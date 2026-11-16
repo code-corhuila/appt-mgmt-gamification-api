@@ -1,0 +1,92 @@
+openapi: 3.0.3
+info:
+  title: Salud Activa Achievements API
+  version: 1.0.0
+  description: Lists the authenticated user's achievements and current progress.
+servers:
+  - url: http://localhost:3000
+    description: Local API Gateway
+paths:
+  /api/achievements:
+    get:
+      summary: List available achievements for the authenticated user
+      operationId: listAchievements
+      tags:
+        - Achievements
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Available achievements and their current status
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - achievements
+                properties:
+                  achievements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Achievement'
+              example:
+                achievements:
+                  - id: first-appointment
+                    title: Primer turno
+                    description: Registra tu primer turno médico.
+                    obtained: true
+                    progress:
+                      current: 1
+                      target: 1
+                  - id: medication-routine
+                    title: Mi tratamiento organizado
+                    description: Registra un medicamento en tu seguimiento.
+                    obtained: false
+                    progress:
+                      current: 0
+                      target: 1
+        '401':
+          description: Bearer token is missing or the authenticated user no longer exists
+        '403':
+          description: Bearer token is invalid or expired
+        '503':
+          description: Achievement data store is unavailable
+components:
+  schemas:
+    Achievement:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - obtained
+        - progress
+      properties:
+        id:
+          type: string
+          example: first-appointment
+        title:
+          type: string
+          example: Primer turno
+        description:
+          type: string
+        obtained:
+          type: boolean
+          description: True when the user's current records satisfy the achievement.
+        progress:
+          type: object
+          required:
+            - current
+            - target
+          properties:
+            current:
+              type: integer
+              minimum: 0
+            target:
+              type: integer
+              minimum: 1
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
