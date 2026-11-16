@@ -20,10 +20,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Java 17 (Android JDK)
+      - name: Setup Java 17 (Android JDK Temurin)
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Grant Execute Permission for Gradle Wrapper
@@ -86,16 +86,6 @@ jobs:
               ${{ steps.nombre.outputs.imagen }}:${{ github.sha }} || true
           else
             echo "Verificación del paquete de aplicación móvil completada exitosamente."
-          fi
-
-      - name: Publicar en GHCR (solo main con backend)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          if [ -d "backend" ]; then
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${REGISTRO} -u ${{ github.actor }} --password-stdin || true
-            docker tag ${{ steps.nombre.outputs.imagen }}:${{ github.sha }} ${{ steps.nombre.outputs.imagen }}:latest || true
-            docker push ${{ steps.nombre.outputs.imagen }}:${{ github.sha }} || true
-            docker push ${{ steps.nombre.outputs.imagen }}:latest || true
           fi
 
   desplegar:
